@@ -29,6 +29,7 @@ from mxnet import gluon, autograd
 from mxnet.gluon import nn
 import optimizer
 
+
 def set_seed(seed):
     random.seed(seed)
     np.random.seed(seed)
@@ -36,12 +37,14 @@ def set_seed(seed):
 
 # Parse CLI arguments
 
+
 parser = argparse.ArgumentParser(description='MXNet Gluon MNIST Example')
 parser.add_argument('--batch-size', type=int, default=100,
                     help='batch size for training and testing (default: 100)')
 parser.add_argument('--epochs', type=int, default=10,
                     help='number of epochs to train (default: 10)')
-parser.add_argument('--optimizer', type=str, default='sgd', help='sgd|LookaheadSGD')
+parser.add_argument('--optimizer', type=str,
+                    default='sgd', help='sgd|LookaheadSGD')
 parser.add_argument('--lr', type=float, default=0.1,
                     help='learning rate (default: 0.1)')
 parser.add_argument('--momentum', type=float, default=0.9,
@@ -66,9 +69,11 @@ with net.name_scope():
 
 # data
 
+
 def transformer(data, label):
-    data = data.reshape((-1,)).astype(np.float32)/255
+    data = data.reshape((-1,)).astype(np.float32) / 255
     return data, label
+
 
 train_data = gluon.data.DataLoader(
     gluon.data.vision.MNIST('./data', train=True, transform=transformer),
@@ -79,6 +84,7 @@ val_data = gluon.data.DataLoader(
     batch_size=opt.batch_size, shuffle=False)
 
 # train
+
 
 def test(ctx):
     metric = mx.metric.Accuracy()
@@ -96,7 +102,7 @@ def train(epochs, ctx):
     net.initialize(mx.init.Xavier(magnitude=2.24), ctx=ctx)
     # Trainer is for updating parameters with gradient.
     trainer = gluon.Trainer(net.collect_params(), opt.optimizer,
-            {'learning_rate': opt.lr, 'momentum': opt.momentum})
+                            {'learning_rate': opt.lr, 'momentum': opt.momentum})
     metric = mx.metric.Accuracy()
     loss = gluon.loss.SoftmaxCrossEntropyLoss()
 
@@ -120,13 +126,14 @@ def train(epochs, ctx):
 
             if i % opt.log_interval == 0 and i > 0:
                 name, acc = metric.get()
-                print('[Epoch %d Batch %d] Training: %s=%f'%(epoch, i, name, acc))
+                print('[Epoch %d Batch %d] Training: %s=%f' %
+                      (epoch, i, name, acc))
 
         name, acc = metric.get()
-        print('[Epoch %d] Training: %s=%f'%(epoch, name, acc))
+        print('[Epoch %d] Training: %s=%f' % (epoch, name, acc))
 
         name, val_acc = test(ctx)
-        print('[Epoch %d] Validation: %s=%f'%(epoch, name, val_acc))
+        print('[Epoch %d] Validation: %s=%f' % (epoch, name, val_acc))
 
     net.save_parameters('mnist.params')
 
