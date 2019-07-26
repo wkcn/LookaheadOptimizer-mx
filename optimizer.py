@@ -27,6 +27,10 @@ def _register_lookahead_opt():
             index, weight, grad, state, self._parent_cls.update_multi_precision)
 
     def _lookahead_update_impl(self, indexes, weights, grads, states, update_func):
+        if not isinstance(indexes, (list, tuple)):
+            indexes = [indexes]
+            weights = [weights]
+            grads = [grads]
         for index, weight in zip(indexes, weights):
             if index not in self._lookahead_params:
                 self._lookahead_params[index] = weight.copy()
