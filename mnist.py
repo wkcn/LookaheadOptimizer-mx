@@ -27,7 +27,7 @@ import numpy as np
 import mxnet as mx
 from mxnet import gluon, autograd
 from mxnet.gluon import nn
-import optimizer
+import lookahead_optimizer
 
 
 def set_seed(seed):
@@ -44,7 +44,7 @@ parser.add_argument('--batch-size', type=int, default=100,
 parser.add_argument('--epochs', type=int, default=10,
                     help='number of epochs to train (default: 10)')
 parser.add_argument('--optimizer', type=str,
-                    default='sgd', help='sgd|LookaheadSGD')
+                    default='sgd', help='optimizer')
 parser.add_argument('--lr', type=float, default=0.1,
                     help='learning rate (default: 0.1)')
 parser.add_argument('--momentum', type=float, default=0.9,
