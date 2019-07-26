@@ -1,5 +1,5 @@
-# LookaheadOptimizer: k stepsforward, 1stepback
-It is a MXNet implementation of LookaheadOptimizer.
+# Lookahead Optimizer: k steps forward, 1step back
+It is a MXNet implementation of Lookahead Optimizer.
 
 The link of the paper: https://arxiv.org/abs/1907.08610
 
