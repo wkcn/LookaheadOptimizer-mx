@@ -15,8 +15,7 @@ def _register_lookahead_opt():
         self.k = k
         self.alpha = alpha
         self._lookahead_params = dict()
-        self._parent_cls = super(self.__class__, self)
-        self._parent_cls.__init__(**kwargs)
+        self._parent_cls.__init__(self, **kwargs)
 
     def update(self, index, weight, grad, state):
         self._lookahead_update_impl(
@@ -34,7 +33,7 @@ def _register_lookahead_opt():
         for index, weight in zip(indexes, weights):
             if index not in self._lookahead_params:
                 self._lookahead_params[index] = weight.copy()
-        update_func(indexes, weights, grads, states)
+        update_func(self, indexes, weights, grads, states)
         for index, weight, grad in zip(indexes, weights, grads):
             count = self._index_update_count[index]
             if count % self.k == 0:
@@ -53,6 +52,7 @@ def _register_lookahead_opt():
 
     for k, v in optimizers.items():
         name = prefix + k
+        inst_dict['_parent_cls'] = v
         inst = type(name, (v, ), inst_dict)
         mx.optimizer.Optimizer.register(inst)
         globals()[name] = inst
