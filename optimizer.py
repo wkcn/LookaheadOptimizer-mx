@@ -38,7 +38,7 @@ def _register_lookahead_opt():
         for index, weight, grad in zip(indexes, weights, grads):
             count = self._index_update_count[index]
             if count % self.k == 0:
-                old_weight = self._lookahead_params[index]
+                old_weight = self._lookahead_params[index].as_in_context(weight.context)
                 weight -= old_weight
                 weight *= self.alpha
                 old_weight += weight
